@@ -26,4 +26,12 @@ public class PasteControllerTest {
             .andExpect(status().isOk())
             .andExpect(content().string("I am online!"));
     }
+
+    @Test
+    public void pasteNotFound() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                .get("/api/pastes/DOESNTEXIST")
+            )
+            .andExpect(status().isNotFound());
+    }
 }
