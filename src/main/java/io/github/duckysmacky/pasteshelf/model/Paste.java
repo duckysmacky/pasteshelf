@@ -10,7 +10,7 @@ public class Paste {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 32)
     private String hash;
     @Column(nullable = false)
     private String username;

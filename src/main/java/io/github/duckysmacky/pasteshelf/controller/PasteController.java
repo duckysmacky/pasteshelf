@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,15 +33,15 @@ public class PasteController {
 
     @GetMapping("/{hash}")
     public ResponseEntity<?> getPaste(@PathVariable String hash) {
-        if (hash.length() < 7) {
+        if (hash.length() != 32) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("message", "Invalid hash format. Expected at least 7 characters."));
+                .body(Map.of("message", "Invalid hash format. Expected 32 characters, got " + hash.length()));
         }
 
         Optional<Paste> paste = pasteService.getPasteByHash(hash);
         return paste
             .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+            .orElse(ResponseEntity.notFound().build());
     }
 
 }
