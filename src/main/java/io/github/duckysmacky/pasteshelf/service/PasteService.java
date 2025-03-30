@@ -14,6 +14,11 @@ public class PasteService {
         this.repository = repository;
     }
 
+    public Paste createPaste(String content) {
+        Paste paste = new Paste(content);
+        return repository.save(paste);
+    }
+
     public Optional<Paste> getPasteByHash(String hash) {
         return repository.findByHash(hash);
     }

@@ -2,6 +2,10 @@ package io.github.duckysmacky.pasteshelf.model;
 
 import jakarta.persistence.*;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.UUID;
 
 @Entity
@@ -17,9 +21,22 @@ public class Paste {
 
     public Paste () {}
 
-    public Paste(String hash, String content) {
-        this.hash = hash;
+    public Paste(String content) {
         this.content = content;
+        this.hash = generateHash(content);
+    }
+
+    private String generateHash(String content) {
+        MessageDigest digest;
+
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+        byte[] hash = digest.digest(content.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(hash).toUpperCase().substring(0, 7);
     }
 
     public UUID getId() {
@@ -32,10 +49,6 @@ public class Paste {
 
     public String getContent() {
         return content;
-    }
-
-    public void setHash(String hash) {
-        this.hash = hash;
     }
 
     public void setContent(String content) {

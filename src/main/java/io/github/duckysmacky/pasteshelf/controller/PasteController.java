@@ -2,12 +2,12 @@ package io.github.duckysmacky.pasteshelf.controller;
 
 import io.github.duckysmacky.pasteshelf.model.Paste;
 import io.github.duckysmacky.pasteshelf.service.PasteService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -24,11 +24,23 @@ public class PasteController {
         return "I am online!";
     }
 
+    @PostMapping
+    public ResponseEntity<Paste> createPaste(@RequestBody String content) {
+        Paste paste = pasteService.createPaste(content);
+        return ResponseEntity.ok(paste);
+    }
+
     @GetMapping("/{hash}")
     public ResponseEntity<?> getPaste(@PathVariable String hash) {
+        if (hash.length() < 7) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", "Invalid hash format. Expected at least 7 characters."));
+        }
+
         Optional<Paste> paste = pasteService.getPasteByHash(hash);
         return paste
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 }
