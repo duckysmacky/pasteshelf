@@ -39,6 +39,14 @@ public class PasteService {
 
         String input = username + content;
         byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(hash).toUpperCase().substring(0, 7);
+
+        StringBuilder hashString = new StringBuilder();
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hashString.append('0');
+            hashString.append(hex);
+        }
+
+        return hashString.toString().toUpperCase().substring(0, 7);
     }
 }
