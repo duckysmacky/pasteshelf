@@ -2,10 +2,6 @@ package io.github.duckysmacky.pasteshelf.model;
 
 import jakarta.persistence.*;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.UUID;
 
 @Entity
@@ -17,12 +13,15 @@ public class Paste {
     @Column(nullable = false, unique = true)
     private String hash;
     @Column(nullable = false)
+    private String username;
+    @Column(nullable = false)
     private String content;
 
     public Paste () {}
 
-    public Paste(String hash, String content) {
+    public Paste(String hash, String username, String content) {
         this.hash = hash;
+        this.username = username;
         this.content = content;
     }
 
@@ -36,6 +35,10 @@ public class Paste {
 
     public String getContent() {
         return content;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setContent(String content) {

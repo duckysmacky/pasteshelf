@@ -18,9 +18,9 @@ public class PasteService {
         this.repository = repository;
     }
 
-    public Paste createPaste(String content) {
-        String hash = generateHash(content);
-        Paste paste = new Paste(hash, content);
+    public Paste createPaste(String username, String content) {
+        String hash = generateHash(username, content);
+        Paste paste = new Paste(hash, username, content);
         return repository.save(paste);
     }
 
@@ -28,7 +28,7 @@ public class PasteService {
         return repository.findByHash(hash);
     }
 
-    private String generateHash(String content) {
+    private String generateHash(String username, String content) {
         MessageDigest digest;
 
         try {
@@ -37,7 +37,8 @@ public class PasteService {
             throw new RuntimeException("SHA-256 algorithm is unavailable!");
         }
 
-        byte[] hash = digest.digest(content.getBytes(StandardCharsets.UTF_8));
+        String input = username + content;
+        byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(hash).toUpperCase().substring(0, 7);
     }
 }

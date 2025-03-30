@@ -1,11 +1,11 @@
 package io.github.duckysmacky.pasteshelf.controller;
 
+import io.github.duckysmacky.pasteshelf.dto.CreatePasteRequest;
 import io.github.duckysmacky.pasteshelf.model.Paste;
 import io.github.duckysmacky.pasteshelf.service.PasteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 import java.util.Optional;
@@ -25,8 +25,8 @@ public class PasteController {
     }
 
     @PostMapping
-    public ResponseEntity<Paste> createPaste(@RequestBody String content) {
-        Paste paste = pasteService.createPaste(content);
+    public ResponseEntity<Paste> createPaste(@RequestBody CreatePasteRequest request) {
+        Paste paste = pasteService.createPaste(request.getUsername(), request.getContent());
         return ResponseEntity.ok(paste);
     }
 
