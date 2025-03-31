@@ -1,7 +1,9 @@
 package io.github.duckysmacky.pasteshelf.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -14,6 +16,9 @@ public class Paste {
     private String hash;
     @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
     @Column(nullable = false)
     private String content;
 
@@ -39,6 +44,10 @@ public class Paste {
 
     public String getUsername() {
         return username;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public void setContent(String content) {
