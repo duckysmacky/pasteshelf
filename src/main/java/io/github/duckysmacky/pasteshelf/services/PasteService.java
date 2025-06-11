@@ -1,7 +1,7 @@
-package io.github.duckysmacky.pasteshelf.service;
+package io.github.duckysmacky.pasteshelf.services;
 
-import io.github.duckysmacky.pasteshelf.model.Paste;
-import io.github.duckysmacky.pasteshelf.repository.PasteRepository;
+import io.github.duckysmacky.pasteshelf.models.Paste;
+import io.github.duckysmacky.pasteshelf.repositories.PasteRepository;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
