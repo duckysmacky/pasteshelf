@@ -20,6 +20,10 @@ public class Paste {
     @Column(nullable = false)
     private String content;
 
+    public Paste() {
+
+    }
+
     public Paste(String hash, String username, String content) {
         this.hash = hash;
         this.username = username;

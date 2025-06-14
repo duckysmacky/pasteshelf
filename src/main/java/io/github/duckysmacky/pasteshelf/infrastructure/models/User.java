@@ -20,6 +20,10 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    public User() {
+
+    }
+
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
