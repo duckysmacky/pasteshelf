@@ -16,7 +16,11 @@ public class UserService {
 
     public User registerUser(String username, String rawPassword, String email) {
         if (repository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("Username already exists!");
+            throw new IllegalArgumentException("User with the same username already exists!");
+        }
+
+        if (repository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("User with the same email already exists!");
         }
 
         User user = new User(username, rawPassword, email);
@@ -25,5 +29,9 @@ public class UserService {
 
     public Optional<User> getUserByUsername(String username) {
         return repository.findByUsername(username);
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        return repository.findByEmail(email);
     }
 }
