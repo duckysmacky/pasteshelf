@@ -1,7 +1,6 @@
 package io.github.duckysmacky.pasteshelf.infrastructure.models;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,17 +16,15 @@ public class Paste {
     @Column(nullable = false)
     private String username;
     @Column(nullable = false)
-    @CreationTimestamp
     private LocalDateTime createdAt;
     @Column(nullable = false)
     private String content;
-
-    public Paste () {}
 
     public Paste(String hash, String username, String content) {
         this.hash = hash;
         this.username = username;
         this.content = content;
+        this.createdAt = LocalDateTime.now();
     }
 
     public UUID getId() {
