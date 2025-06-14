@@ -1,6 +1,6 @@
 package io.github.duckysmacky.pasteshelf.web.controllers;
 
-import io.github.duckysmacky.pasteshelf.web.dto.CreatePasteRequest;
+import io.github.duckysmacky.pasteshelf.web.dto.PasteCreationRequest;
 import io.github.duckysmacky.pasteshelf.infrastructure.models.Paste;
 import io.github.duckysmacky.pasteshelf.application.services.PasteService;
 import org.springframework.http.HttpStatus;
@@ -19,13 +19,8 @@ public class PasteController {
         this.pasteService = pasteService;
     }
 
-    @GetMapping
-    public String getStatus() {
-        return "I am online!";
-    }
-
     @PostMapping
-    public ResponseEntity<Paste> createPaste(@RequestBody CreatePasteRequest request) {
+    public ResponseEntity<Paste> createPaste(@RequestBody PasteCreationRequest request) {
         Paste paste = pasteService.createPaste(request.getUsername(), request.getContent());
         return ResponseEntity.ok(paste);
     }

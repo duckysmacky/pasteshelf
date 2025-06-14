@@ -1,12 +1,10 @@
 package io.github.duckysmacky.pasteshelf.web.dto;
 
-public class CreatePasteRequest {
+public class PasteCreationRequest {
     private String username;
     private String content;
 
-    public CreatePasteRequest() { }
-
-    public CreatePasteRequest(String username, String content) {
+    public PasteCreationRequest(String username, String content) {
         this.username = username;
         this.content = content;
     }
