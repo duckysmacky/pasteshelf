@@ -1,6 +1,6 @@
-package io.github.duckysmacky.pasteshelf.repositories;
+package io.github.duckysmacky.pasteshelf.infrastructure.repositories;
 
-import io.github.duckysmacky.pasteshelf.models.Paste;
+import io.github.duckysmacky.pasteshelf.infrastructure.models.Paste;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

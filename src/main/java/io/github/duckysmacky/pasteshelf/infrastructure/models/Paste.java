@@ -1,4 +1,4 @@
-package io.github.duckysmacky.pasteshelf.models;
+package io.github.duckysmacky.pasteshelf.infrastructure.models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

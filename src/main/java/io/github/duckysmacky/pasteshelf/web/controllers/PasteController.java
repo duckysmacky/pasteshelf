@@ -1,8 +1,8 @@
-package io.github.duckysmacky.pasteshelf.controllers;
+package io.github.duckysmacky.pasteshelf.web.controllers;
 
-import io.github.duckysmacky.pasteshelf.dto.CreatePasteRequest;
-import io.github.duckysmacky.pasteshelf.models.Paste;
-import io.github.duckysmacky.pasteshelf.services.PasteService;
+import io.github.duckysmacky.pasteshelf.web.dto.CreatePasteRequest;
+import io.github.duckysmacky.pasteshelf.infrastructure.models.Paste;
+import io.github.duckysmacky.pasteshelf.application.services.PasteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

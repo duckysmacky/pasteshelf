@@ -1,4 +1,4 @@
-package io.github.duckysmacky.pasteshelf.dto;
+package io.github.duckysmacky.pasteshelf.web.dto;
 
 public class CreatePasteRequest {
     private String username;
