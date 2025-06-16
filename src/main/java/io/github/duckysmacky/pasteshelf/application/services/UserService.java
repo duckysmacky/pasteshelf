@@ -2,6 +2,7 @@ package io.github.duckysmacky.pasteshelf.application.services;
 
 import io.github.duckysmacky.pasteshelf.infrastructure.models.User;
 import io.github.duckysmacky.pasteshelf.infrastructure.repositories.UserRepository;
+import io.github.duckysmacky.pasteshelf.web.error.UserAlreadyExistsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,11 @@ public class UserService {
 
     public User registerUser(String username, String rawPassword, String email) {
         if (repository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("User with the same username already exists!");
+            throw new UserAlreadyExistsException(String.format("Username '%s' is already taken", username));
         }
 
         if (repository.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("User with the same email already exists!");
+            throw new UserAlreadyExistsException(String.format("Email '%s' is already in use", email));
         }
 
         String encodedPassword = passwordEncoder.encode(rawPassword);
