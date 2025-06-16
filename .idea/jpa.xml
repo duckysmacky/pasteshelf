@@ -4,4 +4,13 @@
     <option name="defaultUnitInitialized" value="true" />
     <option name="renamerInitialized" value="true" />
   </component>
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit moduleName="Pasteshelf.main" name="Default">
+        <packages>
+          <package value="io.github.duckysmacky.pasteshelf" />
+        </packages>
+      </persistence-unit>
+    </persistence-units>
+  </component>
 </project>
