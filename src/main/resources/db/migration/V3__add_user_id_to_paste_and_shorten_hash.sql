@@ -1,0 +1,4 @@
+ALTER TABLE pastes
+    ALTER COLUMN hash TYPE VARCHAR(16),
+    ADD COLUMN user_id UUID NOT NULL,
+    ADD CONSTRAINT fk_paste_user FOREIGN KEY (user_id) REFERENCES users(id);
