@@ -3,6 +3,7 @@ package io.github.duckysmacky.pasteshelf.infrastructure.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -29,6 +30,13 @@ public class User {
         this.password = password;
         this.email = email;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public Map<String, String> asResponseBody() {
+        return Map.of(
+            "username", username,
+            "email", email
+        );
     }
 
     public UUID getId() {

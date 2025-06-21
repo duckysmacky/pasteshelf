@@ -25,10 +25,7 @@ public class AccountController {
         User user = userService.getUserByUsername(userDetails.getUsername())
             .orElseThrow(() -> new UserNotFoundException(String.format("User with username '%s' was not found", userDetails.getUsername())));
 
-        return ResponseEntity.ok(Map.of(
-            "username", user.getUsername(),
-            "email", user.getEmail()
-        ));
+        return ResponseEntity.ok(user.asResponseBody());
     }
 
     @PatchMapping
@@ -39,10 +36,7 @@ public class AccountController {
 
         User updatedUser = userService.updateUser(userDetails.getUsername(), newUsername, newPassword, newEmail);
 
-        return ResponseEntity.ok(Map.of(
-            "username", updatedUser.getUsername(),
-            "email", updatedUser.getEmail()
-        ));
+        return ResponseEntity.ok(updatedUser.asResponseBody());
     }
 
     @DeleteMapping
