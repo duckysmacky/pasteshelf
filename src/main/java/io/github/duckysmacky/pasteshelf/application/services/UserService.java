@@ -3,13 +3,19 @@ package io.github.duckysmacky.pasteshelf.application.services;
 import io.github.duckysmacky.pasteshelf.infrastructure.models.User;
 import io.github.duckysmacky.pasteshelf.infrastructure.repositories.UserRepository;
 import io.github.duckysmacky.pasteshelf.web.error.UserAlreadyExistsException;
+import io.github.duckysmacky.pasteshelf.web.error.UserNotFoundException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
@@ -33,11 +39,45 @@ public class UserService {
         return repository.save(user);
     }
 
+    public User updateUser(String username, String newUsername, String newRawPassword, String newEmail) {
+        User user = repository.findByUsername(username)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with username '%s' was not found", username)));
+
+        // TODO: add data validation
+        if (newUsername != null && !newUsername.isBlank())
+            user.setUsername(newUsername);
+        if (newEmail != null && !newEmail.isBlank())
+            user.setEmail(newEmail);
+        if (newRawPassword != null && !newRawPassword.isBlank()) {
+            String encodedPassword = passwordEncoder.encode(newRawPassword);
+            user.setPassword(encodedPassword);
+        }
+
+        return repository.save(user);
+    }
+
+    public void deleteUser(String username) {
+        User user = repository.findByUsername(username)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with username '%s' was not found", username)));
+
+        repository.delete(user);
+    }
+
+
     public Optional<User> getUserByUsername(String username) {
         return repository.findByUsername(username);
     }
 
     public Optional<User> getUserByEmail(String email) {
         return repository.findByEmail(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = repository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException(String.format("User with username '%s' was not found", username)));
+
+        return new org.springframework.security.core.userdetails.
+            User(user.getUsername(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
     }
 }

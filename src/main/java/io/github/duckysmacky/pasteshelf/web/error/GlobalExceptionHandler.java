@@ -15,8 +15,15 @@ public class GlobalExceptionHandler {
             .body(new ErrorResponseBody(exception.getMessage()));
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFound(UserNotFoundException exception) {
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(new ErrorResponseBody(exception.getMessage()));
+    }
+
     @ExceptionHandler(RequestValidationFailedException.class)
-    public ResponseEntity<?> handRequestValidationFailed(RequestValidationFailedException exception) {
+    public ResponseEntity<?> handleRequestValidationFailed(RequestValidationFailedException exception) {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(new ErrorResponseBody(exception.getMessage()));
