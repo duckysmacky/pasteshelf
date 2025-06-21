@@ -15,9 +15,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .csrf(AbstractHttpConfigurer::disable)
-            // Allow rest api calls, but require auth for any other requests
+            // Allow requests for specific api endpoints without auth
             .authorizeHttpRequests(authManager -> {
-                authManager.requestMatchers("/api/**").permitAll();
+                authManager.requestMatchers("/api/account/register").permitAll();
+                authManager.requestMatchers("/api/pastes/**").permitAll();
                 authManager.anyRequest().authenticated();
             })
             .httpBasic(Customizer.withDefaults())

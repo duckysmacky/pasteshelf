@@ -10,18 +10,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
-public class AuthController {
+@RequestMapping("/api/account")
+public class AccountController {
     private final UserService userService;
 
-    public AuthController(UserService userService) {
+    public AccountController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterUserRequest request) {
+    public ResponseEntity<?> registerAccount(@RequestBody RegisterUserRequest request) {
         User user = userService.registerUser(request.getUsername(), request.getPassword(), request.getEmail());
+        // TODO: make proper json response
         return ResponseEntity.ok("User " + user.getUsername() + " was successfully registered");
     }
+
+
 
 }
