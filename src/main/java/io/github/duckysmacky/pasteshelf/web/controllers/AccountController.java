@@ -23,7 +23,7 @@ public class AccountController {
     @GetMapping
     public ResponseEntity<?> getAccountDetails(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.getUserByUsername(userDetails.getUsername())
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with username '%s' was not found", userDetails.getUsername())));
+            .orElseThrow(UserNotFoundException::new);
 
         return ResponseEntity.ok(user.asResponseBody());
     }

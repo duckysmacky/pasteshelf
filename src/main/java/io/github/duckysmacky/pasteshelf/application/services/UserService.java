@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
 
     public User updateUser(String username, String newUsername, String newRawPassword, String newEmail) {
         User user = repository.findByUsername(username)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with username '%s' was not found", username)));
+            .orElseThrow(UserNotFoundException::new);
 
         // TODO: add data validation
         if (newUsername != null && !newUsername.isBlank())
@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
 
     public void deleteUser(String username) {
         User user = repository.findByUsername(username)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with username '%s' was not found", username)));
+            .orElseThrow(UserNotFoundException::new);
 
         repository.delete(user);
     }
