@@ -36,8 +36,8 @@ public class GlobalExceptionHandler {
             .body(new ErrorResponseBody(exception.getMessage()));
     }
 
-    @ExceptionHandler(RequestValidationFailedException.class)
-    public ResponseEntity<?> handleRequestValidationFailed(RequestValidationFailedException exception) {
+    @ExceptionHandler(DataValidationFailedException.class)
+    public ResponseEntity<?> handleRequestValidationFailed(DataValidationFailedException exception) {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(new ErrorResponseBody(exception.getMessage()));

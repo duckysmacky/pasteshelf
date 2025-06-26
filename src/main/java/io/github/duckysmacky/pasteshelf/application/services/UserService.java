@@ -4,6 +4,7 @@ import io.github.duckysmacky.pasteshelf.infrastructure.models.User;
 import io.github.duckysmacky.pasteshelf.infrastructure.repositories.UserRepository;
 import io.github.duckysmacky.pasteshelf.web.error.UserAlreadyExistsException;
 import io.github.duckysmacky.pasteshelf.web.error.UserNotFoundException;
+import io.github.duckysmacky.pasteshelf.web.util.UserValidator;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,10 +18,12 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository repository;
+    private final UserValidator userValidator;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository repository, UserValidator userValidator, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.userValidator = userValidator;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -33,6 +36,8 @@ public class UserService implements UserDetailsService {
             throw new UserAlreadyExistsException(String.format("Email '%s' is already in use", email));
         }
 
+        userValidator.validateUser(username, rawPassword, email);
+
         String encodedPassword = passwordEncoder.encode(rawPassword);
         User user = new User(username, encodedPassword, email);
 
@@ -43,12 +48,18 @@ public class UserService implements UserDetailsService {
         User user = repository.findByUsername(username)
             .orElseThrow(UserNotFoundException::new);
 
-        // TODO: add data validation
-        if (newUsername != null && !newUsername.isBlank())
+        if (newUsername != null) {
+            userValidator.validateUsername(newUsername);
             user.setUsername(newUsername);
-        if (newEmail != null && !newEmail.isBlank())
+        }
+
+        if (newEmail != null) {
+            userValidator.validateEmail(newEmail);
             user.setEmail(newEmail);
-        if (newRawPassword != null && !newRawPassword.isBlank()) {
+        }
+
+        if (newRawPassword != null) {
+            userValidator.validatePassword(newRawPassword);
             String encodedPassword = passwordEncoder.encode(newRawPassword);
             user.setPassword(encodedPassword);
         }

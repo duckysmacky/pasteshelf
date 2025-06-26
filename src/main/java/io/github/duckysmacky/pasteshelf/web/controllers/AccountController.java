@@ -52,7 +52,7 @@ public class AccountController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerAccount(@RequestBody RegisterUserRequest request) {
-        User user = userService.registerUser(request.getUsername(), request.getPassword(), request.getEmail());
+        User user = userService.registerUser(request.username(), request.password(), request.email());
 
         return ResponseEntity.ok(Map.of(
             "username", user.getUsername(),
