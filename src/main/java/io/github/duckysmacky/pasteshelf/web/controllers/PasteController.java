@@ -5,8 +5,9 @@ import io.github.duckysmacky.pasteshelf.infrastructure.models.User;
 import io.github.duckysmacky.pasteshelf.web.dto.CreatePasteRequest;
 import io.github.duckysmacky.pasteshelf.infrastructure.models.Paste;
 import io.github.duckysmacky.pasteshelf.application.services.PasteService;
+import io.github.duckysmacky.pasteshelf.web.dto.UpdatePasteRequest;
+import io.github.duckysmacky.pasteshelf.web.error.InvalidHashFormatException;
 import io.github.duckysmacky.pasteshelf.web.error.UserNotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,7 +30,7 @@ public class PasteController {
     @PostMapping
     public ResponseEntity<?> createPaste(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CreatePasteRequest request) {
         User creator = userService.getUserByUsername(userDetails.getUsername())
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with username '%s' was not found", userDetails.getUsername())));
+            .orElseThrow(UserNotFoundException::new);
 
         Paste paste = pasteService.createPaste(request.content(), creator);
 
@@ -39,8 +40,7 @@ public class PasteController {
     @GetMapping("/{hash}")
     public ResponseEntity<?> getPaste(@PathVariable String hash) {
         if (hash.length() != 16) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("message", "Invalid hash format. Expected 16 characters, got " + hash.length()));
+            throw new InvalidHashFormatException(hash.length());
         }
 
         Optional<Paste> paste = pasteService.getPasteByHash(hash);
@@ -50,4 +50,31 @@ public class PasteController {
             .orElse(ResponseEntity.notFound().build());
     }
 
+    @PatchMapping("/{hash}")
+    public ResponseEntity<?> updatePaste(@PathVariable String hash, @AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdatePasteRequest request) {
+        if (hash.length() != 16) {
+            throw new InvalidHashFormatException(hash.length());
+        }
+
+        User user = userService.getUserByUsername(userDetails.getUsername())
+            .orElseThrow(UserNotFoundException::new);
+
+        Paste updatedPaste = pasteService.updatePaste(hash, request.content(), user);
+
+        return ResponseEntity.ok(updatedPaste.asResponseBody());
+    }
+
+    @DeleteMapping("/{hash}")
+    public ResponseEntity<?> deletePaste(@PathVariable String hash, @AuthenticationPrincipal UserDetails userDetails) {
+        if (hash.length() != 16) {
+            throw new InvalidHashFormatException(hash.length());
+        }
+
+        User user = userService.getUserByUsername(userDetails.getUsername())
+                .orElseThrow(UserNotFoundException::new);
+
+        pasteService.deletePaste(hash, user);
+
+        return ResponseEntity.ok().build();
+    }
 }
