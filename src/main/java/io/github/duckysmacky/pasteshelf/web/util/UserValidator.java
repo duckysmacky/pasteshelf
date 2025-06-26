@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 @Component
 public class UserValidator {
     // I am aware that this regex sucks, will replace in the future
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9_.+-]+@([a-z]+)\\\\.[a-z]{2,3}$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9_.+-]+@([a-z]+)\\.[a-z]{2,3}$");
 
     public void validateUsername(String username) {
         if (username == null || username.isBlank())
