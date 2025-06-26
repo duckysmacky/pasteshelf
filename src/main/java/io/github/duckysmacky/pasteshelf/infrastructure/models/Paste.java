@@ -63,14 +63,6 @@ public class Paste {
         return hashString.substring(0, 16);
     }
 
-    public Map<String, String> asResponseBody() {
-        return Map.of(
-            "owner", owner.getUsername(),
-            "hash", hash,
-            "content", content
-        );
-    }
-
     public void updateContent(String content) {
         this.hash = getContentHash(content);
         this.content = content;

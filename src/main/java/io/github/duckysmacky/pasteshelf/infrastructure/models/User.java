@@ -36,13 +36,6 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Map<String, String> asResponseBody() {
-        return Map.of(
-            "username", username,
-            "email", email
-        );
-    }
-
     public void setUsername(String username) {
         this.username = username;
         this.updatedAt = LocalDateTime.now();

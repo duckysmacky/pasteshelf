@@ -5,15 +5,17 @@ import io.github.duckysmacky.pasteshelf.infrastructure.models.User;
 import io.github.duckysmacky.pasteshelf.web.dto.CreatePasteRequest;
 import io.github.duckysmacky.pasteshelf.infrastructure.models.Paste;
 import io.github.duckysmacky.pasteshelf.application.services.PasteService;
+import io.github.duckysmacky.pasteshelf.web.dto.PasteResponse;
 import io.github.duckysmacky.pasteshelf.web.dto.UpdatePasteRequest;
 import io.github.duckysmacky.pasteshelf.web.error.InvalidHashFormatException;
+import io.github.duckysmacky.pasteshelf.web.error.PasteNotFoundException;
 import io.github.duckysmacky.pasteshelf.web.error.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @RestController
@@ -21,10 +23,12 @@ import java.util.Optional;
 public class PasteController {
     private final PasteService pasteService;
     private final UserService userService;
+    private final DateTimeFormatter timeFormatter;
 
-    public PasteController(PasteService pasteService, UserService userService) {
+    public PasteController(PasteService pasteService, UserService userService, DateTimeFormatter timeFormatter) {
         this.pasteService = pasteService;
         this.userService = userService;
+        this.timeFormatter = timeFormatter;
     }
 
     @PostMapping
@@ -34,7 +38,7 @@ public class PasteController {
 
         Paste paste = pasteService.createPaste(request.content(), creator);
 
-        return ResponseEntity.ok(paste.asResponseBody());
+        return ResponseEntity.ok(PasteResponse.from(paste, timeFormatter));
     }
 
     @GetMapping("/{hash}")
@@ -46,8 +50,8 @@ public class PasteController {
         Optional<Paste> paste = pasteService.getPasteByHash(hash);
 
         return paste
-            .map(p -> ResponseEntity.ok(p.asResponseBody()))
-            .orElse(ResponseEntity.notFound().build());
+            .map(p -> ResponseEntity.ok(PasteResponse.from(p, timeFormatter)))
+            .orElseThrow(PasteNotFoundException::new);
     }
 
     @PatchMapping("/{hash}")
@@ -61,7 +65,7 @@ public class PasteController {
 
         Paste updatedPaste = pasteService.updatePaste(hash, request.content(), user);
 
-        return ResponseEntity.ok(updatedPaste.asResponseBody());
+        return ResponseEntity.ok(PasteResponse.from(updatedPaste, timeFormatter));
     }
 
     @DeleteMapping("/{hash}")
