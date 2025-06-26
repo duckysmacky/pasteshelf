@@ -12,6 +12,7 @@
     </list>
     <writeAnnotations>
       <writeAnnotation name="jakarta.persistence.Id" />
+      <writeAnnotation name="org.springframework.beans.factory.annotation.Autowired" />
     </writeAnnotations>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
