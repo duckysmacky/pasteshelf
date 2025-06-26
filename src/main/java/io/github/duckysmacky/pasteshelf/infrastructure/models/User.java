@@ -1,6 +1,7 @@
 package io.github.duckysmacky.pasteshelf.infrastructure.models;
 
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -20,6 +21,8 @@ public class User {
     private String email;
     @Column(nullable = false)
     private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     public User() {
 
@@ -30,6 +33,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Map<String, String> asResponseBody() {
@@ -37,6 +41,21 @@ public class User {
             "username", username,
             "email", email
         );
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+        this.updatedAt = LocalDateTime.now();
     }
 
     public UUID getId() {
@@ -59,15 +78,8 @@ public class User {
         return createdAt;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

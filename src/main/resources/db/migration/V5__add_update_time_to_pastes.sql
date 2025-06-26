@@ -1,0 +1,5 @@
+ALTER TABLE pastes
+    ADD COLUMN updated_at TIMESTAMP NOT NULL;
+
+ALTER TABLE users
+    ADD COLUMN updated_at TIMESTAMP NOT NULL;

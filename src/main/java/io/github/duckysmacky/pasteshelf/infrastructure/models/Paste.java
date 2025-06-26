@@ -1,6 +1,7 @@
 package io.github.duckysmacky.pasteshelf.infrastructure.models;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -20,6 +21,8 @@ public class Paste {
     private User owner;
     @Column(nullable = false)
     private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
     @Column(nullable = false, unique = true, length = 16)
     private String hash;
     @Column(nullable = false)
@@ -32,10 +35,12 @@ public class Paste {
     public Paste(User owner, String content) {
         this.owner = owner;
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
         this.hash = getContentHash(content);
         this.content = content;
     }
 
+    // TODO: add some kind of randomize to hash so same pastes won't get the same hash
     private String getContentHash(String content) {
         MessageDigest digest;
 
@@ -69,6 +74,7 @@ public class Paste {
     public void updateContent(String content) {
         this.hash = getContentHash(content);
         this.content = content;
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void setOwner(User owner) {
@@ -81,6 +87,10 @@ public class Paste {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public User getOwner() {
