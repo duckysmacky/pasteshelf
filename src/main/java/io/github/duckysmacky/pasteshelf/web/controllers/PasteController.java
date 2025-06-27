@@ -10,6 +10,7 @@ import io.github.duckysmacky.pasteshelf.web.dto.UpdatePasteRequest;
 import io.github.duckysmacky.pasteshelf.web.error.InvalidHashFormatException;
 import io.github.duckysmacky.pasteshelf.web.error.PasteNotFoundException;
 import io.github.duckysmacky.pasteshelf.web.error.UserNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +39,9 @@ public class PasteController {
 
         Paste paste = pasteService.createPaste(request.content(), creator);
 
-        return ResponseEntity.ok(PasteResponse.from(paste, timeFormatter));
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(PasteResponse.from(paste, timeFormatter));
     }
 
     @GetMapping("/{hash}")

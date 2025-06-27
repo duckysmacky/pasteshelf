@@ -5,6 +5,7 @@ import io.github.duckysmacky.pasteshelf.infrastructure.models.User;
 import io.github.duckysmacky.pasteshelf.web.dto.RegisterUserRequest;
 import io.github.duckysmacky.pasteshelf.web.dto.UserResponse;
 import io.github.duckysmacky.pasteshelf.web.error.UserNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,10 +55,9 @@ public class AccountController {
     public ResponseEntity<?> registerAccount(@RequestBody RegisterUserRequest request) {
         User user = userService.registerUser(request.username(), request.password(), request.email());
 
-        return ResponseEntity.ok(Map.of(
-            "username", user.getUsername(),
-            "email", user.getEmail()
-        ));
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(UserResponse.from(user, timeFormatter));
     }
 
 }
