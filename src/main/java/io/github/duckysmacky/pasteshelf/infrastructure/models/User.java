@@ -1,10 +1,10 @@
 package io.github.duckysmacky.pasteshelf.infrastructure.models;
 
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -23,6 +23,8 @@ public class User {
     private LocalDateTime createdAt;
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Paste> pastes = new ArrayList<>();
 
     public User() {
 
@@ -49,6 +51,16 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void addPaste(Paste paste) {
+        pastes.add(paste);
+        updatedAt = LocalDateTime.now();
+    }
+
+    public void removePaste(Paste paste) {
+        pastes.remove(paste);
+        updatedAt = LocalDateTime.now();
     }
 
     public UUID getId() {
