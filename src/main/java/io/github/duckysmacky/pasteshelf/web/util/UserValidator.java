@@ -21,6 +21,9 @@ public class UserValidator {
     public void validatePassword(String password) {
         if (password == null || password.isBlank())
             throw new DataValidationFailedException("Password must not be blank");
+
+        if (!(password.length() >= 4 && password.length() <= 20))
+            throw new DataValidationFailedException("Password must be between 4 and 20 characters");
     }
 
     public void validateEmail(String email) {
