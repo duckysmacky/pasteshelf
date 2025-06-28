@@ -18,7 +18,7 @@ public class SecurityConfig {
             // Allow requests for specific api endpoints without auth
             .authorizeHttpRequests(authManager -> {
                 authManager.requestMatchers("/api/account/register").permitAll();
-                authManager.requestMatchers("/api/pastes/**").permitAll();
+                authManager.requestMatchers("/api/pastes/{hash}").permitAll();
                 authManager.anyRequest().authenticated();
             })
             .httpBasic(Customizer.withDefaults())
