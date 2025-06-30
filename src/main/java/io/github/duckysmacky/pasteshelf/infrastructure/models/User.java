@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Paste> pastes = new ArrayList<>();
+    private List<Paste> pastes;
 
     public User() {
 
@@ -36,6 +36,7 @@ public class User {
         this.email = email;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.pastes = new ArrayList<>();
     }
 
     public void setUsername(String username) {
