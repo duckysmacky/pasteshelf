@@ -53,6 +53,7 @@ gradle bootRun
 Or you can build a local Docker image and later launch it using `docker-compose`
 
 ```shell
+gradle build
 docker build -t pasteshelf-app .
 docker-compose up
 ```
