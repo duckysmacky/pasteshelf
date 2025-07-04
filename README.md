@@ -20,44 +20,32 @@ All the API documentation will be later added to project's wiki
 
 ## Installation and running
 
-There are two ways to run Pasteshelf: locally or via Docker
+First you have to clone the project locally. Then, there are two ways to run Pasteshelf: local build or via Docker
 
-Before running the application using any of the available ways **you are required** to create a `.env` file in the
-root project directory. A **minimal** `.env` file has to contain the following keys:
+The project requires a correctly set up `.env` file with database and port details. There is a `.env.example` file to
+help you setup your own `.env` file.
 
-```dotenv
-APP_PORT=
-DB_NAME=
-DB_USER=
-DB_PASSWORD=
-```
-
-If you are running **locally**, make sure that your Postgres server has a valid database and user with password for
-Pasteshelf to use which match those provided in the `.env` file. You have to create them by hand.
-
-### Locally
+### Local build
 
 You can manually build the project and run it as a Spring Boot application via Gradle
 
 ```shell
-# if gradle is installed system-wide
-gradle bootRun
-# if on unix
+# unix
 ./gradlew bootRun
-# if on windows
+# windows
 .\gradlew.bat bootRun
 ```
 
-### Using Docker
+Make sure that your Postgres server has a valid database and user with password for Pasteshelf to use which match those 
+provided in the `.env` file.
+
+### Via Docker
 
 Or you can build a local Docker image and later launch it using `docker-compose`
 
 ```shell
-gradle build
-docker build -t pasteshelf-app .
 docker-compose up
 ```
-
 
 ## Features
 
