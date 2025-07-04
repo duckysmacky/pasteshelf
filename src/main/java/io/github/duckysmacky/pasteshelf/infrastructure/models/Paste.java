@@ -1,10 +1,8 @@
 package io.github.duckysmacky.pasteshelf.infrastructure.models;
 
+import io.github.duckysmacky.pasteshelf.core.security.Hasher;
 import jakarta.persistence.*;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -34,35 +32,19 @@ public class Paste {
         this.owner = owner;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-        this.hash = getContentHash(content);
+        this.hash = generateHash(owner.getUsername(), content, LocalDateTime.now());
         this.content = content;
     }
 
-    // TODO: add some kind of randomize to hash so same pastes won't get the same hash
-    private String getContentHash(String content) {
-        MessageDigest digest;
-
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("SHA-256 hashing algorithm is unavailable");
-        }
-
-        byte[] hash = digest.digest(content.getBytes(StandardCharsets.UTF_8));
-
-        StringBuilder hashString = new StringBuilder();
-        for (byte b : hash) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1)
-                hashString.append('0');
-            hashString.append(hex);
-        }
-
-        return hashString.substring(0, 16);
+    /// Generates a unique hash-id based on owner's username, content and creation time to make it as unique as
+    /// possible
+    private String generateHash(String ownerUsername, String content, LocalDateTime createdAt) {
+        String data = createdAt.toString() + ownerUsername + content;
+        Hasher hasher = Hasher.newSha256();
+        return hasher.hash(data, 16);
     }
 
     public void updateContent(String content) {
-        this.hash = getContentHash(content);
         this.content = content;
         this.updatedAt = LocalDateTime.now();
     }
