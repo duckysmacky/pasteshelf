@@ -15,6 +15,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   app:
+    build: .
     image: pasteshelf-app
     container_name: pasteshelf-app
     depends_on:

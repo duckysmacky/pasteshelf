@@ -30,3 +30,8 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+// Generate only the Spring Boot jar, instead of -plain.jar
+jar {
+    enabled = false
+}
