@@ -19,6 +19,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authManager -> {
                 authManager.requestMatchers("/api/account/register").permitAll();
                 authManager.requestMatchers("/api/pastes/{hash}").permitAll();
+                authManager.requestMatchers("/api/users/**").permitAll();
                 authManager.anyRequest().authenticated();
             })
             .httpBasic(Customizer.withDefaults())
