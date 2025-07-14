@@ -2,15 +2,20 @@
 FROM eclipse-temurin:21-jdk-jammy AS builder
 WORKDIR /app
 
-# Copy files to build
-COPY src/ src/
+# Copy Gradle files
 COPY gradle/ gradle/
 COPY gradlew/ .
 COPY build.gradle .
 COPY settings.gradle .
 
+# Cache dependencies
+RUN ./gradlew dependencies -x test --no-daemon
+
+# Copy files to build
+COPY src/ src/
+
 # Build (skip tests)
-RUN ./gradlew build -x test
+RUN ./gradlew build -x test --no-daemon
 
 # Run the app
 FROM eclipse-temurin:21-jre-jammy AS runner
