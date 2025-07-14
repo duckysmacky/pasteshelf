@@ -88,4 +88,7 @@ public class User {
         return updatedAt;
     }
 
+    public List<Paste> getPastes() {
+        return pastes;
+    }
 }

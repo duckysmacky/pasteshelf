@@ -2,6 +2,7 @@ package io.github.duckysmacky.pasteshelf.web.controllers;
 
 import io.github.duckysmacky.pasteshelf.application.services.UserService;
 import io.github.duckysmacky.pasteshelf.infrastructure.models.User;
+import io.github.duckysmacky.pasteshelf.web.dto.PasteResponse;
 import io.github.duckysmacky.pasteshelf.web.dto.RegisterUserRequest;
 import io.github.duckysmacky.pasteshelf.web.dto.UserResponse;
 import io.github.duckysmacky.pasteshelf.web.error.UserNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -49,6 +51,18 @@ public class AccountController {
         userService.deleteUser(userDetails.getUsername());
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/pastes")
+    public ResponseEntity<?> getAccountPastes(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.getUserByUsername(userDetails.getUsername())
+            .orElseThrow(UserNotFoundException::new);
+
+        List<PasteResponse> pasteResponses = user.getPastes().stream()
+            .map(paste -> PasteResponse.from(paste, timeFormatter))
+            .toList();
+
+        return ResponseEntity.ok(pasteResponses);
     }
 
     @PostMapping("/register")
