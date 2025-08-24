@@ -4,7 +4,6 @@ services:
   db:
     image: postgres:17
     container_name: pasteshelf-db
-    restart: always
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
